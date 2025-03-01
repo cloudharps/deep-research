@@ -5,7 +5,7 @@ const { Document } = require("langchain/document");
 
 async function deepResearch(userQuestion, searchLimit = 5, contentLimit = 3) {
   try {
-    console.log("🔍 심층 리서치 시작:");
+    console.log("🔍 Deep Research 시작:");
     console.log(`질문: "${userQuestion}"\n`);
 
     // 1. 사용자 질문 의도 분석
@@ -65,7 +65,7 @@ async function deepResearch(userQuestion, searchLimit = 5, contentLimit = 3) {
               url: auxResults[0].url,
               length: extractedContent.length
             });
-            break; // 하나의 콘텐츠만 추출하고 중단
+            break;
           }
         }
       }
@@ -118,7 +118,7 @@ if (require.main === module) {
   
   (async () => {
     try {
-      const result = await deepResearch(userQuestion);
+      const result = await deepResearch(userQuestion, 5, 10);
       
       console.log("\n================================================");
       console.log("질문:", userQuestion);
