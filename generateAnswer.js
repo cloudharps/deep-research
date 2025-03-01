@@ -46,7 +46,7 @@ async function generateAnswer(query, documents) {
     console.time("임베딩 처리 시간");
 
     // 청크를 적절한 크기의 배치로 분할
-    const BATCH_SIZE = 20; // 배치당 문서 수
+    const BATCH_SIZE = 20; // 배치당 청크 수
     const batches = [];
 
     for (let i = 0; i < splitDocuments.length; i += BATCH_SIZE) {
