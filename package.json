@@ -10,6 +10,7 @@
   "description": "",
   "dependencies": {
     "@langchain/core": "^0.3.42",
+    "@langchain/google-genai": "^0.1.10",
     "@langchain/openai": "^0.4.4",
     "@mozilla/readability": "^0.5.0",
     "axios": "^1.8.1",
