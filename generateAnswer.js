@@ -45,12 +45,10 @@ async function generateAnswer(query, documents) {
     답변:
     `);
 
-    // 문서 결합 체인 생성 - documentPrompt 수정
+    // 문서 결합 체인 생성
     const documentChain = await createStuffDocumentsChain({
       llm,
       prompt,
-      // 문자열 대신 PromptTemplate 객체 사용하거나 아예 생략
-      // documentPrompt 파라미터 생략
     });
 
     // 검색 체인 생성
@@ -76,17 +74,14 @@ if (require.main === module) {
     new Document({
       pageContent:
         "LangChain은 LLM 기반 애플리케이션 개발을 위한 라이브러리입니다.",
-      metadata: { source: "문서1" },
     }),
     new Document({
       pageContent:
         "RAG는 Retrieval Augmented Generation의 약자로, 검색 결과를 활용하여 답변을 생성하는 방식입니다.",
-      metadata: { source: "문서2" },
     }),
     new Document({
       pageContent:
         "JavaScript 환경에서도 LangChain을 통해 LLM을 쉽게 활용할 수 있습니다.",
-      metadata: { source: "문서3" },
     }),
   ];
 
