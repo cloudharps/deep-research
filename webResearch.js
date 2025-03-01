@@ -82,6 +82,7 @@ if (require.main === module) {
       console.log("콘텐츠를 추출하는 중...");
       const content = await extractContent(testUrl);
       console.log(content.title);
+      console.log(`콘텐츠 길이: ${content.length}자`);
 
       // 콘텐츠 미리보기 (처음 100자만)
       const previewText = content.textContent.substring(0, 100);
