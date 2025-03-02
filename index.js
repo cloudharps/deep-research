@@ -151,8 +151,25 @@ async function deepResearch(userQuestion, searchLimit = 5, maxAttempts = 3) {
           })
       );
 
+      // 이전 답변과 개선점 전달 (두 번째 시도부터)
+      let previousAnswer = "";
+      let improvementPoints = [];
+
+      if (attempt > 1 && evaluationResult) {
+        previousAnswer = currentAnswer;
+        improvementPoints = evaluationResult.missingInfo || [];
+        console.log(
+          "\n🔄 이전 답변과 개선점을 활용하여 새로운 답변 생성 중..."
+        );
+      }
+
       // 누적된 모든 콘텐츠를 사용하여 답변 생성
-      currentAnswer = await generateAnswer(userQuestion, documents);
+      currentAnswer = await generateAnswer(
+        userQuestion,
+        documents,
+        previousAnswer,
+        improvementPoints
+      );
       currentSources = allSources;
 
       // 4. 답변 평가

@@ -19,7 +19,7 @@ const llm = new ChatOpenAI({
   },
 });
 
-async function generateAnswer(query, documents) {
+async function generateAnswer(query, documents, previousAnswer = "", improvementPoints = []) {
   try {
     console.time("총 처리 시간");
 
@@ -66,7 +66,7 @@ async function generateAnswer(query, documents) {
       await Promise.all(
         batches.slice(1).map(async (batch, idx) => {
           console.log(`배치 ${idx + 2}/${batches.length} 처리 중...`);
-          // 각 배치 임베딩 처리 
+          // 각 배치 임베딩 처리
           const batchVectors = await embeddings.embedDocuments(
             batch.map((doc) => doc.pageContent)
           );
@@ -89,7 +89,7 @@ async function generateAnswer(query, documents) {
     });
 
     // 프롬프트 템플릿
-    const prompt = ChatPromptTemplate.fromTemplate(`
+    let promptTemplate = `
     당신은 객관적인 정보를 종합하여 보고서 형태로 제공하는 리서치 전문가입니다. 다음 정보를 바탕으로 사용자 질문에 대한 객관적이고 유익한 답변을 작성하세요.
 
     답변 작성 시 반드시 지켜야 할 지침:
@@ -99,11 +99,33 @@ async function generateAnswer(query, documents) {
     4. 객관적인 정보 전달자로서 사실과 데이터에 기반한 중립적 어조를 유지하세요.
     5. 필요 시 실제적이고 구체적인 예시와 단계별 조언을 포함하되, 객관적 사실에 근거해야 합니다.
     6. 답변은 논리적 흐름을 가지고 체계적으로 구성된 보고서 형태로 작성하세요.
-    7. 제공된 정보만으로 질문에 답하기 어렵다면, 정보의 한계를 인정하고 알려진 내용과 함께 추가 정보를 요청하세요.
+    7. 제공된 정보만으로 질문에 답하기 어렵다면, 정보의 한계를 인정하고 알려진 내용과 함께 추가 정보를 요청하세요.`;
 
-    컨텍스트: {context}
-    질문: {input}
-    `);
+    // 이전 답변이 있는 경우 추가
+    if (previousAnswer) {
+      promptTemplate += `
+    
+    이전에 생성한 답변:
+    ${previousAnswer}`;
+    }
+
+    // 개선점이 있는 경우 추가
+    if (improvementPoints && improvementPoints.length > 0) {
+      promptTemplate += `
+    
+    다음 항목들에 대한 정보를 추가하여 이전 답변을 개선하세요:
+    ${improvementPoints
+      .map((point, index) => `${index + 1}. ${point}`)
+      .join("\n")}`;
+    }
+
+    // 컨텍스트 및 질문 추가
+    promptTemplate += `
+
+    참고 자료: {context}
+    질문: {input}`;
+
+    const prompt = ChatPromptTemplate.fromTemplate(promptTemplate);
 
     // 문서 결합 체인 생성
     const documentChain = await createStuffDocumentsChain({
