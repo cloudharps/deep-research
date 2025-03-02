@@ -4,12 +4,7 @@ const { generateAnswer } = require("./generateAnswer");
 const { evaluateAnswer } = require("./evaluateAnswer");
 const { Document } = require("langchain/document");
 
-async function deepResearch(
-  userQuestion,
-  searchLimit = 5,
-  contentLimit = 10,
-  maxAttempts = 3
-) {
+async function deepResearch(userQuestion, searchLimit = 5, maxAttempts = 3) {
   try {
     console.log("🔍 Deep Research 시작:");
     console.log(`질문: "${userQuestion}"\n`);
@@ -54,10 +49,12 @@ async function deepResearch(
       // 콘텐츠 추출
       const contents = [];
 
-      for (let i = 0; i < Math.min(searchResults.length, contentLimit); i++) {
+      for (let i = 0; i < searchResults.length; i++) {
         const result = searchResults[i];
         console.log(
-          `🔹 (${i + 1}/${contentLimit}) ${result.title} 콘텐츠 추출 중...`
+          `🔹 (${i + 1}/${searchResults.length}) ${
+            result.title
+          } 콘텐츠 추출 중...`
         );
 
         try {
@@ -225,7 +222,7 @@ if (require.main === module) {
 
   (async () => {
     try {
-      const result = await deepResearch(userQuestion, 5, 10, 3);
+      const result = await deepResearch(userQuestion, 5, 3);
 
       console.log("\n================================================");
       console.log("질문:", userQuestion);
