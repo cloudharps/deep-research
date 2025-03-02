@@ -1,7 +1,7 @@
-const { analyzeQuestion } = require("./analyzeQuestion");
-const { searchUrls, extractContent } = require("./webResearch");
-const { generateAnswer } = require("./generateAnswer");
-const { evaluateAnswer } = require("./evaluateAnswer");
+const { analyzeQuestion } = require("./ai/analyzeQuestion");
+const { searchUrls, extractContent } = require("./tools/webResearch");
+const { generateAnswer } = require("./ai/generateAnswer");
+const { evaluateAnswer } = require("./ai/evaluateAnswer");
 const { Document } = require("langchain/document");
 
 async function deepResearch(userQuestion, searchLimit = 5, maxAttempts = 3) {
@@ -196,8 +196,10 @@ async function deepResearch(userQuestion, searchLimit = 5, maxAttempts = 3) {
         finalAnswer = currentAnswer;
         finalSources = currentSources;
       } else {
-        console.log("\n⚠️ 답변이 충분하지 않습니다. 검색 쿼리를 개선합니다.");
-        console.log(`🔍 개선된 쿼리: "${evaluationResult.improvedQuery}"`);
+        if (attempt < maxAttempts) {
+          console.log("\n⚠️ 답변이 충분하지 않습니다. 추가 검색을 시도합니다.");
+          // console.log(`🔍 개선된 쿼리: "${evaluationResult.improvedQuery}"`);
+        }
         mainQuery = evaluationResult.improvedQuery;
 
         // 이번 시도의 결과를 저장 (최대 시도 횟수 도달 시 사용)
