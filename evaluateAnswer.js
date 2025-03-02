@@ -43,7 +43,7 @@ async function evaluateAnswer(question, answer) {
     {{
       "score": (1-10 사이의 전체 점수),
       "evaluation": (평가 설명),
-      "isAdequate": (true/false, 8점 이상이면 true),
+      "isAdequate": (true/false, 9점 이상이면 true),
       "missingInfo": (부족한 정보 목록),
       "improvedQuery": (정보 부족 해결을 위한 하나의 개선된 검색 쿼리만 문자열로 제공)
     }}
