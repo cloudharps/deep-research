@@ -1,13 +1,13 @@
-require("dotenv").config();
+const config = require("../config/config");
 const { ChatOpenAI } = require("@langchain/openai");
 const { ChatPromptTemplate } = require("@langchain/core/prompts");
 
 const llm = new ChatOpenAI({
-  model: "google/gemini-2.0-flash-thinking-exp:free", // 모델 설정
-  temperature: 0.2,
-  apiKey: process.env.OPENROUTER_API_KEY,
+  model: config.models.llm.name,
+  temperature: config.models.llm.temperature.evaluator,
+  apiKey: config.api.openrouter.apiKey,
   configuration: {
-    baseURL: "https://openrouter.ai/api/v1",
+    baseURL: config.api.openrouter.baseURL,
   },
 });
 

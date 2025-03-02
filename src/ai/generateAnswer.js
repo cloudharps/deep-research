@@ -1,4 +1,4 @@
-require("dotenv").config();
+const config = require("../config/config");
 const { ChatOpenAI } = require("@langchain/openai");
 const { GoogleGenerativeAIEmbeddings } = require("@langchain/google-genai");
 const { MemoryVectorStore } = require("langchain/vectorstores/memory");
@@ -11,11 +11,11 @@ const { ChatPromptTemplate } = require("@langchain/core/prompts");
 const { RecursiveCharacterTextSplitter } = require("langchain/text_splitter");
 
 const llm = new ChatOpenAI({
-  model: "google/gemini-2.0-flash-thinking-exp:free", // 모델 설정
-  temperature: 0.3,
-  apiKey: process.env.OPENROUTER_API_KEY,
+  model: config.models.llm.name,
+  temperature: config.models.llm.temperature.generator,
+  apiKey: config.api.openrouter.apiKey,
   configuration: {
-    baseURL: "https://openrouter.ai/api/v1",
+    baseURL: config.api.openrouter.baseURL,
   },
 });
 
@@ -23,9 +23,10 @@ async function generateAnswer(query, documents, previousAnswer = "", improvement
   try {
     console.time("총 처리 시간");
 
+    // 임베딩 모델 설정 
     const embeddings = new GoogleGenerativeAIEmbeddings({
-      apiKey: process.env.GOOGLE_API_KEY,
-      model: "text-embedding-004", // 임베딩 모델 설정
+      apiKey: config.api.google.apiKey,
+      model: config.models.embedding.name,
     });
 
     // 문서 분할기 생성
