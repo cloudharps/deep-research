@@ -191,15 +191,13 @@ async function deepResearch(userQuestion, searchLimit = 5, maxAttempts = 3) {
 
       // 답변이 적절한지 확인
       if (evaluationResult.isAdequate) {
-        console.log("\n✅ 적절한 답변을 찾았습니다!");
+        console.log("\n✅ 적절한 답변을 생성했습니다!");
         adequateAnswer = true;
         finalAnswer = currentAnswer;
         finalSources = currentSources;
       } else {
-        if (attempt < maxAttempts) {
-          console.log("\n⚠️ 답변이 충분하지 않습니다. 추가 검색을 시도합니다.");
-          // console.log(`🔍 개선된 쿼리: "${evaluationResult.improvedQuery}"`);
-        }
+        console.log("\n⚠️ 답변이 충분하지 않습니다. 추가 검색을 시도합니다.");
+        // console.log(`🔍 개선된 쿼리: "${evaluationResult.improvedQuery}"`);
         mainQuery = evaluationResult.improvedQuery;
 
         // 이번 시도의 결과를 저장 (최대 시도 횟수 도달 시 사용)
