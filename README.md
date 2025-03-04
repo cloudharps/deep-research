@@ -1,4 +1,4 @@
-# Deep Research
+# 📝 Deep Research
 
 이 프로젝트는 OpenAI와 Google의 Deep Research, xAI의 Deep Search와 같은 LLM을 활용한 심층 검색 기능을 구현하는 것을 목표로 합니다. 사용자 질문에 대해 웹을 탐색하고, 관련 정보를 수집하여 답변을 제공합니다.
 
