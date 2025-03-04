@@ -124,7 +124,7 @@ deep-research/
 └── README.md
 ```
 
-## 커스터마이징
+## 설정 
 
 `src/config/config.js` 파일에서 다음 설정을 변경할 수 있습니다:
 
