@@ -40,13 +40,14 @@ async function evaluateAnswer(question, answer) {
     - 중요한 정보 영역이 누락되면 -1점 고려
 
     답변에서 부족한 부분이 있다면, missingInfo 필드에 구체적으로 어떤 정보가 추가되어야 하는지 명확하게 작성하세요. 이 정보는 다음 답변 생성 시 직접 활용됩니다.
+    missingInfo는 항상 배열 형태로 제공하세요. 예시: ["정보1", "정보2"] 또는 정보가 없으면 []
 
     JSON 형식으로 다음 필드를 포함하여 응답하세요:
     {{
       "score": (1-10 사이의 전체 점수),
       "evaluation": (평가 설명),
       "isAdequate": (true/false, 9점 이상이면 true),
-      "missingInfo": (부족한 정보 목록, 가능한 구체적으로 작성),
+      "missingInfo": [(부족한 정보 항목1), (부족한 정보 항목2), ...],
       "improvedQuery": (정보 부족 해결을 위한 하나의 개선된 검색 쿼리만 문자열로 제공)
     }}
 
