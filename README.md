@@ -87,8 +87,8 @@ yarn install
 프로젝트 루트에 `.env` 파일을 생성하고 다음과 같이 설정하세요:
 
 ```
-OPENROUTER_API_KEY=your_openrouter_api_key
-GOOGLE_API_KEY=your_google_api_key
+OPENROUTER_API_KEY=your_openrouter_api_key # (선택)
+GEMINI_API_KEY=your_gemini_api_key  # Google AI Studio에서 발급받은 API 키 (필수)
 ```
 
 ### 실행 방법
@@ -142,10 +142,32 @@ deep-research/
 
 `src/config/config.js` 파일에서 다음 설정을 변경할 수 있습니다:
 
-- 사용할 LLM 모델
+- 사용할 LLM 모델 및 제공자 
 - temperature 설정
 - 임베딩 모델
 - API 엔드포인트 및 구성
+
+### LLM Provider 설정 
+
+이 프로젝트는 다음 두 가지 LLM API를 지원합니다:
+
+1. **OpenRouter API** (기본값)
+   - 다양한 모델에 대한 통합 접근 제공
+   - `google/gemini-2.0-flash-thinking-exp:free` 모델 기본 사용
+
+2. **Google Gemini API**
+   - Google AI Studio에서 제공하는 직접 API 접근
+   - `gemini-1.5-pro` 모델 기본 사용
+
+제공자를 변경하려면 `config.js` 파일에서 `defaultProvider` 값을 수정하세요:
+
+```javascript
+global: {
+  // "openrouter" 또는 "gemini" 선택 가능
+  defaultProvider: "openrouter",
+  // defaultProvider: "gemini",
+}
+```
 
 ## 기타
 
