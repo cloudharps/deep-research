@@ -1,15 +1,7 @@
-const config = require("../config/config");
-const { ChatOpenAI } = require("@langchain/openai");
 const { ChatPromptTemplate } = require("@langchain/core/prompts");
+const { createLLM } = require("../utils/llmFactory");
 
-const llm = new ChatOpenAI({
-  model: config.models.llm.name,
-  temperature: config.models.llm.temperature.evaluator,
-  apiKey: config.api.openrouter.apiKey,
-  configuration: {
-    baseURL: config.api.openrouter.baseURL,
-  },
-});
+const llm = createLLM("evaluator");
 
 async function evaluateAnswer(question, answer) {
   try {

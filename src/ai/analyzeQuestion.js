@@ -1,15 +1,7 @@
-const config = require("../config/config");
-const { ChatOpenAI } = require("@langchain/openai");
 const { PromptTemplate } = require("@langchain/core/prompts");
+const { createLLM } = require("../utils/llmFactory");
 
-const llm = new ChatOpenAI({
-  model: config.models.llm.name,
-  temperature: config.models.llm.temperature.analyzer,
-  apiKey: config.api.openrouter.apiKey,
-  configuration: {
-    baseURL: config.api.openrouter.baseURL,
-  },
-});
+const llm = createLLM("analyzer");
 
 const promptTemplate = `
 당신은 사용자의 질문을 분석하고, 그 의도를 파악하여 효과적인 검색 쿼리를 생성하는 AI 어시스턴트입니다. 사용자의 질문이 주어지면, 아래 단계를 따라 질문의 의도를 분석하고, 이를 바탕으로 검색 쿼리를 제안하세요. 모든 단계는 명확하고 체계적으로 수행되어야 하며, 결과는 사용자가 원하는 정보를 정확히 찾을 수 있도록 도와야 합니다.
@@ -88,7 +80,9 @@ if (require.main === module) {
         console.log("===== 질문 분석 결과 =====");
         console.log("📌 의도 파악: " + result["의도 파악"]["질문의 의도"]);
         console.log("🔍 기본 쿼리: " + result["검색 쿼리"]["기본 쿼리"]);
-        console.log("🔍 보조 쿼리: " + result["검색 쿼리"]["보조 쿼리"].join(', '));
+        console.log(
+          "🔍 보조 쿼리: " + result["검색 쿼리"]["보조 쿼리"].join(", ")
+        );
       }
     } catch (error) {
       console.error("결과 출력 중 오류 발생:", error);

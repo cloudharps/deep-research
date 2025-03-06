@@ -1,6 +1,3 @@
-const config = require("../config/config");
-const { ChatOpenAI } = require("@langchain/openai");
-const { GoogleGenerativeAIEmbeddings } = require("@langchain/google-genai");
 const { MemoryVectorStore } = require("langchain/vectorstores/memory");
 const { Document } = require("langchain/document");
 const { createRetrievalChain } = require("langchain/chains/retrieval");
@@ -9,25 +6,21 @@ const {
 } = require("langchain/chains/combine_documents");
 const { ChatPromptTemplate } = require("@langchain/core/prompts");
 const { RecursiveCharacterTextSplitter } = require("langchain/text_splitter");
+const { createLLM, createEmbeddingModel } = require("../utils/llmFactory");
 
-const llm = new ChatOpenAI({
-  model: config.models.llm.name,
-  temperature: config.models.llm.temperature.generator,
-  apiKey: config.api.openrouter.apiKey,
-  configuration: {
-    baseURL: config.api.openrouter.baseURL,
-  },
-});
+const llm = createLLM("generator");
 
-async function generateAnswer(query, documents, previousAnswer = "", improvementPoints = []) {
+async function generateAnswer(
+  query,
+  documents,
+  previousAnswer = "",
+  improvementPoints = []
+) {
   try {
     console.time("총 처리 시간");
 
-    // 임베딩 모델 설정 
-    const embeddings = new GoogleGenerativeAIEmbeddings({
-      apiKey: config.api.google.apiKey,
-      model: config.models.embedding.name,
-    });
+    // 임베딩 모델 설정
+    const embeddings = createEmbeddingModel();
 
     // 문서 분할기 생성
     console.time("문서 분할 시간");
