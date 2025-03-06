@@ -3,6 +3,7 @@ const { searchUrls, extractContent } = require("./tools/webResearch");
 const { generateAnswer } = require("./ai/generateAnswer");
 const { evaluateAnswer } = require("./ai/evaluateAnswer");
 const { Document } = require("langchain/document");
+const readline = require("readline");
 
 async function deepResearch(userQuestion, searchLimit = 5, maxAttempts = 3) {
   try {
@@ -235,14 +236,35 @@ async function deepResearch(userQuestion, searchLimit = 5, maxAttempts = 3) {
 module.exports = { deepResearch };
 
 if (require.main === module) {
-  const userQuestion = process.argv[2] || "gpt 4.5의 성능을 평가해줘";
+  // 명령줄 인자로 질문을 받았으면 바로 실행
+  const userQuestion = process.argv[2];
+  if (userQuestion) {
+    runDeepResearch(userQuestion);
+  }
 
-  (async () => {
+  // 질문이 없으면 터미널에서 사용자 입력 대기 
+  else {
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    });
+
+    rl.question("검색하려는 질문을 입력하세요: ", (question) => {
+      rl.close();
+      if (question.trim()) {
+        runDeepResearch(question);
+      } else {
+        console.log("질문이 입력되지 않았습니다. 프로그램을 종료합니다.");
+      }
+    });
+  }
+
+  async function runDeepResearch(question) {
     try {
-      const result = await deepResearch(userQuestion, 5, 3);
+      const result = await deepResearch(question, 5, 3);
 
       console.log("\n================================================");
-      console.log("질문:", userQuestion);
+      console.log("질문:", question);
       console.log("------------------------------------------------");
       console.log("답변:");
       console.log(result.answer);
@@ -253,11 +275,11 @@ if (require.main === module) {
         console.log(`   ${source.url}`);
       });
       console.log("------------------------------------------------");
-      console.log(`시도 횟수: ${result.attempts}`);
+      console.log(`시도 횟수: ${Math.min(result.attempts, 3)}/3`);
       console.log(`최종 평가 점수: ${result.evaluation.score}/10`);
       console.log("================================================");
     } catch (error) {
       console.error("프로그램 실행 중 오류 발생:", error);
     }
-  })();
+  }
 }
