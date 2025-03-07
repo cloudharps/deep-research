@@ -17,7 +17,7 @@ module.exports = {
       apiKey: process.env.OPENROUTER_API_KEY,
     },
     gemini: {
-      modelName: "gemini-1.5-pro", // Gemini API용 모델명
+      modelName: "gemini-2.0-flash-thinking-exp-01-21", // Gemini API용 모델명
       apiKey: process.env.GEMINI_API_KEY,
     },
     // 공통 설정
